@@ -1,16 +1,35 @@
-spring:
-  # 本地开发数据源配置
-  # 复制此文件为 application-local.yml 并填写你的本地配置
-  datasource:
-    url: jdbc:postgresql://localhost:5432/aieducenter
-    username: your_local_username
-    password: your_local_password
+# ICBC Payment Gateway Configuration
+#
+# 前置步骤：
+# 1. 将工行 SDK JAR 文件放置到项目根目录的 lib/icbc/ 目录：
+#    - icbc-api-sdk-cop.jar
+#    - icbc-api-sdk-cop-io.jar
+#    - icbc-ca.jar
+# 2. 将此文件重命名为 application-local.yml（不带 .example 后缀）
+# 3. 填写实际的工行配置信息（app-id, mer-id, 密钥等）
 
-  # Redis 配置（本地 Docker: docker run -d --name aiedu-redis-local -p 6379:6379 redis:7-alpine）
-  data:
-    redis:
-      host: localhost
-      port: 6379
+gateway:
+  icbc:
+    # 环境配置: local, test, prod
+    env: local
 
-# 开发环境：显示 SQL
-spring.jpa.show-sql: true
+    # 应用配置
+    app-id: 11000000000000079872
+    mer-id: 020004161912
+    mer-prtcl-no: 0200041619120201  # 协议号 = 商户号 + 0201
+
+    # 密钥配置（使用实际部署时替换）
+    private-key: |
+      -----BEGIN PRIVATE KEY-----
+      YOUR_PRIVATE_KEY_HERE
+      -----END PRIVATE KEY-----
+    public-key: |
+      -----BEGIN PUBLIC KEY-----
+      ICBC_PUBLIC_KEY_HERE
+      -----END PUBLIC KEY-----
+
+    # 接口地址
+    payment-url: https://gw.open.icbc.com.cn/api/cardbusiness/qrcode/consumption/V1
+    payment-query-url: https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/orderqry/V1
+    refund-url: https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/merrefund/V1
+    refund-query-url: https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/refundqry/V1
