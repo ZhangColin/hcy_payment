@@ -2,9 +2,10 @@ package com.aieducenter.payment.domain.port;
 
 import com.aieducenter.payment.domain.aggregate.PaymentOrder;
 import com.aieducenter.payment.domain.aggregate.RefundOrder;
-import com.aieducenter.payment.domain.enums.PaymentMethod;
-import com.aieducenter.payment.domain.enums.PaymentStatus;
-import com.aieducenter.payment.domain.enums.RefundStatus;
+import com.aieducenter.payment.domain.port.response.CreatePaymentResponse;
+import com.aieducenter.payment.domain.port.response.CreateRefundResponse;
+import com.aieducenter.payment.domain.port.response.QueryPaymentResponse;
+import com.aieducenter.payment.domain.port.response.QueryRefundResponse;
 import com.cartisan.core.stereotype.Port;
 import com.cartisan.core.stereotype.PortType;
 
