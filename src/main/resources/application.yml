@@ -1,0 +1,64 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: aieducenter-platform
+
+  # 激活的配置（默认 local，部署时通过环境变量覆盖）
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+  # Flyway 配置
+  flyway:
+    enabled: false  # 禁用自动配置，使用 FlywayConfig 手动配置多实例
+
+  # 数据源驱动
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: none  # 暂时禁用验证
+    show-sql: false
+
+# cartisan-security 配置
+cartisan:
+  security:
+    interceptor:
+      path-patterns:
+        - "/api/**"
+        - "/admin/**"
+      exclude-path-patterns:
+        - "/error"
+        - "/actuator/**"
+        - "/api/account/verification-code/**"
+        - "/api/account/verify-code"
+        - "/api/account/register/**"
+        - "/api/account/login"
+        - "/api/account/login/sms"
+        - "/api/account/reset-password"
+        - "/api/health"
+        - "/swagger-ui/**"
+        - "/api-docs/**"
+
+# Sa-Token 配置
+sa-token:
+  token-name: Authorization
+  timeout: 604800       # 7 天（秒）
+  active-timeout: -1    # 不启用动态续期
+  is-concurrent: true
+  is-share: false
+  token-style: uuid
+
+# Actuator 配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: never

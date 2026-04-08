@@ -1,0 +1,17 @@
+spring:
+  # 生产环境数据源配置（会被 docker-compose 环境变量覆盖）
+  # 实际值由 .env.prod 或环境变量提供
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  # Redis 配置（会被 docker-compose 环境变量覆盖）
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+
+# 生产环境：关闭 SQL 日志
+spring.jpa.show-sql: false
+logging.level.root: INFO

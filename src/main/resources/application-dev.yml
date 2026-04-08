@@ -1,0 +1,12 @@
+spring:
+  # 开发部署（Docker）数据源配置
+  datasource:
+    url: jdbc:postgresql://postgres:5432/aieducenter
+    username: aiedu
+    password: dev123
+
+  # Redis 配置
+  data:
+    redis:
+      host: redis
+      port: 6379
