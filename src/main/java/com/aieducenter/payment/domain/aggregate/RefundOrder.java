@@ -147,6 +147,9 @@ public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot
         this.refundableAmount = refundableAmount;
         this.reason = reason;
         this.attach = attach;
+
+        // 初始状态（不依赖 @PrePersist）
+        this.status = RefundStatus.PENDING;
     }
 
     /**

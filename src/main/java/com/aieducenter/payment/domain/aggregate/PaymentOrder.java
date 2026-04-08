@@ -154,6 +154,11 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
         this.returnUrl = returnUrl;
         this.attach = attach;
         this.expiredSeconds = expiredSeconds != null ? expiredSeconds : 3600L; // 默认1小时
+
+        // 初始状态（不依赖 @PrePersist）
+        this.status = PaymentStatus.PENDING;
+        this.currency = "CNY";
+        this.expiredAt = calculateExpiredAt();
     }
 
     /**
