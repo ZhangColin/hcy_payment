@@ -97,3 +97,6 @@ logs/
 
 # Backup files
 *.bak
+
+# ICBC SDK - third party libraries
+lib/
