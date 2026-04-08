@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.aieducenter.security.domain.entity.ApiKeyPermission;
 import com.aieducenter.security.domain.enums.ApiKeyStatus;
 import com.aieducenter.security.domain.error.SecurityMessage;
-import com.cartisan.core.exception.ApplicationException;
+import com.cartisan.core.domain.AggregateRoot;
 import com.cartisan.core.stereotype.Aggregate;
 import com.cartisan.core.util.Assertions;
 import com.cartisan.data.jpa.domain.AuditableSoftDeletable;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "security_api_keys")
 @Aggregate
-public class ApiKey extends AuditableSoftDeletable {
+public class ApiKey extends AuditableSoftDeletable implements AggregateRoot<ApiKey, Long> {
     private static final String API_KEY_PATTERN = "^[A-Z0-9]{32}$";
 
     @Getter
