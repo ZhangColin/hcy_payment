@@ -112,6 +112,13 @@ public class RefundOrder extends AuditableSoftDeletable {
     }
 
     /**
+     * JPA 要求的无参构造函数
+     */
+    protected RefundOrder() {
+        // JPA only
+    }
+
+    /**
      * 创建退款订单
      */
     public RefundOrder(

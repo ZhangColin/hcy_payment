@@ -4,7 +4,6 @@ import com.aieducenter.payment.domain.aggregate.PaymentOrder;
 import com.aieducenter.payment.domain.aggregate.RefundOrder;
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
-import com.aieducenter.payment.domain.enums.RefundStatus;
 import com.aieducenter.payment.domain.port.PaymentGatewayPort;
 import com.aieducenter.payment.domain.port.response.*;
 import com.cartisan.core.stereotype.Adapter;
@@ -73,13 +72,16 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
             response = client.execute(request, clientFactory.generateMsgId());
         } catch (Exception e) {
             log.error("ICBC payment request failed", e);
-            return CreatePaymentResponse.builder()
-                .success(false)
-                .returnCode("SYSTEM_ERROR")
-                .returnMsg(e.getMessage())
-                .executionTime(System.currentTimeMillis() - startTime)
-                .requestParams(requestParams)
-                .build();
+            return new CreatePaymentResponse(
+                false,
+                "SYSTEM_ERROR",
+                e.getMessage(),
+                null,
+                null,
+                System.currentTimeMillis() - startTime,
+                requestParams,
+                null
+            );
         }
         long executionTime = System.currentTimeMillis() - startTime;
 
@@ -87,16 +89,16 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
         boolean success = response.getReturnCode() == 0;
         String responseBody = com.alibaba.fastjson2.JSON.toJSONString(response);
 
-        return CreatePaymentResponse.builder()
-            .success(success)
-            .returnCode(String.valueOf(response.getReturnCode()))
-            .returnMsg(response.getReturnMsg())
-            .qrCodeUrl(success ? response.getCodeUrl() : null)
-            .bankOrderNo(success ? response.getOrderId() : null)
-            .executionTime(executionTime)
-            .requestParams(requestParams)
-            .responseBody(responseBody)
-            .build();
+        return new CreatePaymentResponse(
+            success,
+            String.valueOf(response.getReturnCode()),
+            response.getReturnMsg(),
+            success ? response.getCode_url() : null,
+            success ? response.getOrder_id() : null,
+            executionTime,
+            requestParams,
+            responseBody
+        );
     }
 
     @Override
@@ -125,32 +127,39 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
             response = client.execute(request, clientFactory.generateMsgId());
         } catch (Exception e) {
             log.error("ICBC payment query failed", e);
-            return QueryPaymentResponse.builder()
-                .success(false)
-                .returnCode("SYSTEM_ERROR")
-                .returnMsg(e.getMessage())
-                .executionTime(System.currentTimeMillis() - startTime)
-                .build();
+            return new QueryPaymentResponse(
+                false,
+                "SYSTEM_ERROR",
+                e.getMessage(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                System.currentTimeMillis() - startTime
+            );
         }
         long executionTime = System.currentTimeMillis() - startTime;
 
         // 解析响应
-        boolean success = response.getReturnCode() == 0;
-        PaymentStatus status = mapPaymentStatus(response.getPayStatus());
+        boolean success = response.getReturn_code() == 0;
+        PaymentStatus status = mapPaymentStatus(response.getPay_status());
 
-        return QueryPaymentResponse.builder()
-            .success(success)
-            .returnCode(String.valueOf(response.getReturnCode()))
-            .returnMsg(response.getReturnMsg())
-            .paymentStatus(status)
-            .amount(success ? parseAmount(response.getTotal_amt()) : null)
-            .paidAmount(success ? parseAmount(response.getPayment_amt()) : null)
-            .payTime(response.getPayTime())
-            .bankOrderNo(response.getOrderId())
-            .thirdPartyOrderNo(response.getThirdTradeNo())
-            .paymentMethod(mapPaymentMethod(response.getPayType()))
-            .executionTime(executionTime)
-            .build();
+        return new QueryPaymentResponse(
+            success,
+            String.valueOf(response.getReturn_code()),
+            response.getReturn_msg(),
+            status,
+            success ? parseAmount(response.getTotal_amt()) : null,
+            success ? parseAmount(response.getPayment_amt()) : null,
+            response.getPay_time(),
+            response.getOrder_id(),
+            response.getThird_trade_no(),
+            mapPaymentMethod(response.getPay_type()),
+            executionTime
+        );
     }
 
     @Override

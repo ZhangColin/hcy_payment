@@ -100,3 +100,6 @@ logs/
 
 # ICBC SDK - third party libraries
 lib/
+
+# ICBC SDK - third party libraries (place manually)
+lib/

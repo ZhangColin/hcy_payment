@@ -56,6 +56,7 @@ public class PaymentOrder extends AuditableSoftDeletable {
     @Column(name = "subject")
     private String subject;
 
+    @Getter
     @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
