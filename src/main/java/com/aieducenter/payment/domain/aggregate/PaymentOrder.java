@@ -5,6 +5,7 @@ import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
 import com.aieducenter.payment.domain.error.PaymentMessage;
+import com.cartisan.core.domain.AggregateRoot;
 import com.cartisan.core.stereotype.Aggregate;
 import com.cartisan.core.util.Assertions;
 import com.cartisan.data.jpa.domain.AuditableSoftDeletable;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payment_payment_orders")
 @Aggregate
-public class PaymentOrder extends AuditableSoftDeletable {
+public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoot<PaymentOrder, Long> {
     private static final String PAYMENT_ORDER_NO_PREFIX = "PAY";
 
     @Getter

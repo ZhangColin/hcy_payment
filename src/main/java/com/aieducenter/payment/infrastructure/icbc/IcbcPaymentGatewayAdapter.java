@@ -93,7 +93,7 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
             success,
             String.valueOf(response.getReturnCode()),
             response.getReturnMsg(),
-            success ? response.getCode_url() : null,
+            success ? response.getCodeUrl() : null,
             success ? response.getOrder_id() : null,
             executionTime,
             requestParams,
@@ -144,13 +144,13 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
         long executionTime = System.currentTimeMillis() - startTime;
 
         // 解析响应
-        boolean success = response.getReturn_code() == 0;
+        boolean success = response.getReturnCode() == 0;
         PaymentStatus status = mapPaymentStatus(response.getPay_status());
 
         return new QueryPaymentResponse(
             success,
-            String.valueOf(response.getReturn_code()),
-            response.getReturn_msg(),
+            String.valueOf(response.getReturnCode()),
+            response.getReturnMsg(),
             status,
             success ? parseAmount(response.getTotal_amt()) : null,
             success ? parseAmount(response.getPayment_amt()) : null,

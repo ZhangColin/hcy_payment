@@ -1,5 +1,6 @@
 package com.aieducenter.payment.domain.aggregate;
 
+import com.cartisan.core.domain.AggregateRoot;
 import com.cartisan.core.stereotype.Aggregate;
 import com.cartisan.data.jpa.domain.AuditableSoftDeletable;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payment_logs")
 @Aggregate
-public class PaymentLog extends AuditableSoftDeletable {
+public class PaymentLog extends AuditableSoftDeletable implements AggregateRoot<PaymentLog, Long> {
 
     @Getter
     @Id

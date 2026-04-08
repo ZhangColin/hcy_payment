@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.RefundStatus;
 import com.aieducenter.payment.domain.error.PaymentMessage;
+import com.cartisan.core.domain.AggregateRoot;
 import com.cartisan.core.stereotype.Aggregate;
 import com.cartisan.core.util.Assertions;
 import com.cartisan.data.jpa.domain.AuditableSoftDeletable;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payment_refund_orders")
 @Aggregate
-public class RefundOrder extends AuditableSoftDeletable {
+public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot<RefundOrder, Long> {
     private static final String REFUND_ORDER_NO_PREFIX = "REF";
 
     @Getter
