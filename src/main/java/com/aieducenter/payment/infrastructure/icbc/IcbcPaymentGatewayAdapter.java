@@ -4,6 +4,7 @@ import com.aieducenter.payment.domain.aggregate.PaymentOrder;
 import com.aieducenter.payment.domain.aggregate.RefundOrder;
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
+import com.aieducenter.payment.domain.enums.RefundStatus;
 import com.aieducenter.payment.domain.port.PaymentGatewayPort;
 import com.aieducenter.payment.domain.port.response.*;
 import com.cartisan.core.stereotype.Adapter;
@@ -15,6 +16,9 @@ import com.icbc.api.response.CardbusinessQrcodeConsumptionResponseV1;
 import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineOrderqryRequestV1;
 import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineOrderqryRequestV1.CardbusinessAggregatepayB2cOnlineOrderqryRequestV1Biz;
 import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineOrderqryResponseV1;
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineMerrefundRequestV1;
+import com.icbc.api.request.CardbusinessAggregatepayB2cOnlineMerrefundRequestV1.CardbusinessAggregatepayB2cOnlineMerrefundRequestV1Biz;
+import com.icbc.api.response.CardbusinessAggregatepayB2cOnlineMerrefundResponseV1;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,16 +168,58 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
 
     @Override
     public CreateRefundResponse createRefund(RefundOrder refundOrder, String originalBankOrderNo) {
-        // TODO: 实现退款逻辑
-        // 需要调用工行的退款接口
-        throw new UnsupportedOperationException("Refund not implemented yet");
+        DefaultIcbcClient client = clientFactory.createClient();
+
+        CardbusinessAggregatepayB2cOnlineMerrefundRequestV1 request =
+            new CardbusinessAggregatepayB2cOnlineMerrefundRequestV1();
+        request.setServiceUrl(icbcConfig.getRefundUrl());
+
+        CardbusinessAggregatepayB2cOnlineMerrefundRequestV1Biz bizContent =
+            new CardbusinessAggregatepayB2cOnlineMerrefundRequestV1Biz();
+
+        bizContent.setMer_id(icbcConfig.getMerId());
+        bizContent.setOuttrx_serial_no(refundOrder.getRefundOrderNo()); // 退货流水号
+        bizContent.setOut_trade_no(refundOrder.getPaymentOrderNo()); // 原商户订单号
+        bizContent.setOrder_id(originalBankOrderNo); // 原工行订单号
+        bizContent.setRet_total_amt(refundOrder.getRefundAmount().toString()); // 退款金额（分）
+        bizContent.setTrnsc_ccy("001"); // 人民币
+        bizContent.setIcbc_appid(icbcConfig.getAppId());
+        bizContent.setMer_prtcl_no(icbcConfig.getMerPrtclNo());
+
+        request.setBizContent(bizContent);
+
+        long startTime = System.currentTimeMillis();
+        CardbusinessAggregatepayB2cOnlineMerrefundResponseV1 response;
+        try {
+            response = client.execute(request, clientFactory.generateMsgId());
+        } catch (Exception e) {
+            log.error("ICBC refund request failed", e);
+            return new CreateRefundResponse(
+                false,
+                "SYSTEM_ERROR",
+                e.getMessage(),
+                null,
+                System.currentTimeMillis() - startTime
+            );
+        }
+        long executionTime = System.currentTimeMillis() - startTime;
+
+        boolean success = response.getReturnCode() == 0;
+
+        return new CreateRefundResponse(
+            success,
+            String.valueOf(response.getReturnCode()),
+            response.getReturnMsg(),
+            success ? response.getIntrx_serial_no() : null, // 工行退款流水号
+            executionTime
+        );
     }
 
     @Override
     public QueryRefundResponse queryRefund(String refundOrderNo, String bankRefundNo) {
-        // TODO: 实现退款查询逻辑
-        // 需要调用工行的退款查询接口
-        throw new UnsupportedOperationException("Refund query not implemented yet");
+        // 退款查询复用支付查询接口，通过 out_trade_no 查询
+        // 工行暂无独立的退款查询接口，返回 UnsupportedOperationException
+        throw new UnsupportedOperationException("Refund query not supported by ICBC SDK");
     }
 
     /**
