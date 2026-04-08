@@ -94,7 +94,7 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
             String.valueOf(response.getReturnCode()),
             response.getReturnMsg(),
             success ? response.getCodeUrl() : null,
-            success ? response.getOrder_id() : null,
+            success ? paymentOrder.getPaymentOrderNo() : null, // 使用支付订单号作为临时银行订单号
             executionTime,
             requestParams,
             responseBody
