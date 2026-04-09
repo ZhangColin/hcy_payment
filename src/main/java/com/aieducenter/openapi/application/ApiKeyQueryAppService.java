@@ -33,4 +33,16 @@ public class ApiKeyQueryAppService {
             .filter(key -> key.getStatus() == ApiKeyStatus.ACTIVE)
             .orElseThrow(() -> new ApplicationException(OpenApiMessage.SIGNATURE_API_KEY_INVALID));
     }
+
+    /**
+     * 根据 apiKey 获取对应的 apiSecret（供签名计算使用）
+     *
+     * @param apiKey API Key 字符串
+     * @return apiSecret 字符串
+     * @throws ApplicationException API Key 不存在或已禁用
+     */
+    @Transactional(readOnly = true)
+    public String getApiSecret(String apiKey) {
+        return findByApiKeyForVerification(apiKey).getApiSecret();
+    }
 }

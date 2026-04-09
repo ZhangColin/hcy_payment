@@ -1,7 +1,6 @@
 package com.aieducenter.openapi.web;
 
 import com.aieducenter.openapi.application.ApiKeyQueryAppService;
-import com.aieducenter.openapi.domain.aggregate.ApiKey;
 import com.aieducenter.openapi.domain.port.SignatureCalculator;
 import com.aieducenter.openapi.domain.service.SignatureService;
 import com.cartisan.web.response.ApiResponse;
@@ -226,8 +225,8 @@ public class SignatureTestController {
      * 核心签名计算逻辑 — 演示客户端应如何组织签名
      */
     private SignatureContext buildSignature(String apiKey, String body, Map<String, String> queryParams) {
-        // Step 1: 用 X-App-Id 查找对应的 ApiKey（含 appSecret）
-        ApiKey key = apiKeyQueryAppService.findByApiKeyForVerification(apiKey);
+        // Step 1: 用 X-App-Id 查找对应的 appSecret
+        String apiSecret = apiKeyQueryAppService.getApiSecret(apiKey);
 
         // Step 2: 计算 bodyDigest
         //   POST: bodyDigest = hex(SHA-256(body.getBytes(UTF-8)))
@@ -260,12 +259,12 @@ public class SignatureTestController {
         String stringToSign = sb.toString();
 
         // Step 6: 计算签名  sign = hex(HMAC-SHA256(stringToSign, appSecret))
-        String sign = signatureCalculator.calculate(stringToSign, key.getApiSecret());
+        String sign = signatureCalculator.calculate(stringToSign, apiSecret);
 
         // 构建签名详情（展示给调用方看）
         LinkedHashMap<String, Object> details = new LinkedHashMap<>();
         details.put("1.X-App-Id(即appId)", apiKey);
-        details.put("2.appSecret(不传输,仅参与计算)", key.getApiSecret().substring(0, 8) + "...");
+        details.put("2.appSecret(不传输,仅参与计算)", apiSecret.substring(0, 8) + "...");
         details.put("3.请求体body", body != null ? body : "(GET请求, 无body)");
         details.put("4.bodyDigest = SHA-256(body)", bodyDigest);
         details.put("5.timestamp(秒级)", timestamp);
