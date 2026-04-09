@@ -2,7 +2,7 @@
 -- Payment Context: Payment Orders
 -- ========================================================================
 
-CREATE TABLE payment_payment_orders (
+CREATE TABLE pay_payment_orders (
     id BIGINT PRIMARY KEY,
     business_order_no VARCHAR(64) NOT NULL,
     payment_order_no VARCHAR(64) NOT NULL UNIQUE,
@@ -10,6 +10,7 @@ CREATE TABLE payment_payment_orders (
     business_type INTEGER NOT NULL,
     status INTEGER NOT NULL,
     amount BIGINT NOT NULL,
+    actual_amount BIGINT,
     currency VARCHAR(3) NOT NULL DEFAULT 'CNY',
     subject VARCHAR(255),
     body TEXT,
@@ -38,16 +39,16 @@ CREATE TABLE payment_payment_orders (
 );
 
 -- Indexes
-CREATE INDEX idx_payment_orders_business_no ON payment_payment_orders(business_order_no) WHERE deleted = FALSE;
-CREATE INDEX idx_payment_orders_system ON payment_payment_orders(business_system_name) WHERE deleted = FALSE;
-CREATE INDEX idx_payment_orders_status ON payment_payment_orders(status) WHERE deleted = FALSE;
-CREATE INDEX idx_payment_orders_created_at ON payment_payment_orders(created_at) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_orders_business_no ON pay_payment_orders(business_order_no) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_orders_system ON pay_payment_orders(business_system_name) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_orders_status ON pay_payment_orders(status) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_orders_created_at ON pay_payment_orders(created_at) WHERE deleted = FALSE;
 
 -- ========================================================================
 -- Payment Context: Refund Orders
 -- ========================================================================
 
-CREATE TABLE payment_refund_orders (
+CREATE TABLE pay_refund_orders (
     id BIGINT PRIMARY KEY,
     business_order_no VARCHAR(64) NOT NULL,
     refund_order_no VARCHAR(64) NOT NULL UNIQUE,
@@ -86,16 +87,16 @@ CREATE TABLE payment_refund_orders (
 );
 
 -- Indexes
-CREATE INDEX idx_refund_orders_payment_no ON payment_refund_orders(payment_order_no) WHERE deleted = FALSE;
-CREATE INDEX idx_refund_orders_business_no ON payment_refund_orders(business_order_no) WHERE deleted = FALSE;
-CREATE INDEX idx_refund_orders_system ON payment_refund_orders(business_system_name) WHERE deleted = FALSE;
-CREATE INDEX idx_refund_orders_status ON payment_refund_orders(status) WHERE deleted = FALSE;
+CREATE INDEX idx_refund_orders_payment_no ON pay_refund_orders(payment_order_no) WHERE deleted = FALSE;
+CREATE INDEX idx_refund_orders_business_no ON pay_refund_orders(business_order_no) WHERE deleted = FALSE;
+CREATE INDEX idx_refund_orders_system ON pay_refund_orders(business_system_name) WHERE deleted = FALSE;
+CREATE INDEX idx_refund_orders_status ON pay_refund_orders(status) WHERE deleted = FALSE;
 
 -- ========================================================================
 -- Payment Context: Payment Logs
 -- ========================================================================
 
-CREATE TABLE payment_logs (
+CREATE TABLE pay_payment_logs (
     id BIGINT PRIMARY KEY,
     payment_order_no VARCHAR(64),
     refund_order_no VARCHAR(64),
@@ -116,6 +117,6 @@ CREATE TABLE payment_logs (
 );
 
 -- Indexes
-CREATE INDEX idx_payment_logs_payment_no ON payment_logs(payment_order_no) WHERE deleted = FALSE;
-CREATE INDEX idx_payment_logs_refund_no ON payment_logs(refund_order_no) WHERE deleted = FALSE;
-CREATE INDEX idx_payment_logs_created_at ON payment_logs(created_at) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_logs_payment_no ON pay_payment_logs(payment_order_no) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_logs_refund_no ON pay_payment_logs(refund_order_no) WHERE deleted = FALSE;
+CREATE INDEX idx_payment_logs_created_at ON pay_payment_logs(created_at) WHERE deleted = FALSE;
