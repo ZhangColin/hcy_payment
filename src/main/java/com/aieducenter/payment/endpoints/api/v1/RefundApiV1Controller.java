@@ -1,5 +1,6 @@
 package com.aieducenter.payment.endpoints.api.v1;
 
+import com.aieducenter.openapi.web.RequireSignature;
 import com.aieducenter.payment.application.RefundAppService;
 import com.aieducenter.payment.application.dto.command.AuditRefundCommand;
 import com.aieducenter.payment.application.dto.command.CreateRefundCommand;
@@ -7,14 +8,12 @@ import com.aieducenter.payment.application.dto.response.RefundOrderResponse;
 import com.cartisan.web.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 退款 API v1 控制器
- */
 @RestController
 @RequestMapping("/api/v1/refunds")
 @RequiredArgsConstructor
@@ -25,19 +24,19 @@ public class RefundApiV1Controller {
     private final RefundAppService refundAppService;
 
     @PostMapping
+    @RequireSignature
     @Operation(summary = "创建退款订单")
     public ApiResponse<RefundOrderResponse> createRefund(
             @Valid @RequestBody CreateRefundCommand command,
-            @RequestHeader(value = "X-API-KEY", required = false) String apiKey
+            HttpServletRequest request
     ) {
-        // TODO: 从 API Key 中提取 businessSystemName
-        String businessSystemName = "DemoSystem";
-
+        String businessSystemName = (String) request.getAttribute("verifiedBusinessSystemName");
         RefundOrderResponse response = refundAppService.createRefund(command, businessSystemName);
         return ApiResponse.ok(response);
     }
 
     @PostMapping("/{refundOrderNo}/audit")
+    @RequireSignature
     @Operation(summary = "审核退款")
     public ApiResponse<RefundOrderResponse> auditRefund(
             @PathVariable String refundOrderNo,
@@ -48,6 +47,7 @@ public class RefundApiV1Controller {
     }
 
     @GetMapping("/{refundOrderNo}")
+    @RequireSignature
     @Operation(summary = "查询退款订单")
     public ApiResponse<RefundOrderResponse> getRefund(
             @PathVariable String refundOrderNo

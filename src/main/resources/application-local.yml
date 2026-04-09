@@ -13,3 +13,10 @@ spring:
 
 # 开发环境：显示 SQL
 spring.jpa.show-sql: true
+
+# 签名验证配置
+openapi:
+  signature:
+    timestamp-tolerance: 300
+    nonce-ttl: 300
+    enabled: true
