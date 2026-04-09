@@ -1,18 +1,20 @@
 package com.aieducenter.config;
 
+import com.aieducenter.openapi.web.SignatureVerificationInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Web 配置类
- *
- * <p>配置跨域资源共享（CORS）支持
- */
 @Configuration
-public class WebConfig {
+@RequiredArgsConstructor
+public class WebConfig implements WebMvcConfigurer {
+
+    private final SignatureVerificationInterceptor signatureVerificationInterceptor;
 
     /**
      * 配置 CORS 过滤器
@@ -44,5 +46,15 @@ public class WebConfig {
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(signatureVerificationInterceptor)
+            .addPathPatterns("/api/v1/**")
+            .excludePathPatterns(
+                "/api/v1/openapi/**",
+                "/api/v1/payment/callbacks/**"
+            );
     }
 }
