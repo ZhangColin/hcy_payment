@@ -7,7 +7,7 @@ CREATE TABLE pay_payment_orders (
     business_order_no VARCHAR(64) NOT NULL,
     payment_order_no VARCHAR(64) NOT NULL UNIQUE,
     business_system_name VARCHAR(128) NOT NULL,
-    business_type INTEGER NOT NULL,
+    business_name VARCHAR(128),
     status INTEGER NOT NULL,
     amount BIGINT NOT NULL,
     actual_amount BIGINT,
@@ -19,6 +19,7 @@ CREATE TABLE pay_payment_orders (
     notify_url VARCHAR(512),
     return_url VARCHAR(512),
     attach TEXT,
+    expired_seconds BIGINT,
 
     -- Timestamps for status transitions
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -54,7 +55,7 @@ CREATE TABLE pay_refund_orders (
     refund_order_no VARCHAR(64) NOT NULL UNIQUE,
     payment_order_no VARCHAR(64) NOT NULL,
     business_system_name VARCHAR(128) NOT NULL,
-    business_type INTEGER NOT NULL,
+    business_name VARCHAR(128),
     status INTEGER NOT NULL,
     refund_amount BIGINT NOT NULL,
     refundable_amount BIGINT NOT NULL,
