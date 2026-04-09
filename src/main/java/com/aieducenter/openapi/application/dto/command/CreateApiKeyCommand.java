@@ -1,4 +1,4 @@
-package com.aieducenter.security.application.dto.command;
+package com.aieducenter.openapi.application.dto.command;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

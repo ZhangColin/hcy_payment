@@ -1,4 +1,4 @@
-package com.aieducenter.security.domain.enums;
+package com.aieducenter.openapi.domain.enums;
 
 import com.cartisan.core.domain.BaseEnum;
 import com.cartisan.data.jpa.converter.BaseEnumConverter;

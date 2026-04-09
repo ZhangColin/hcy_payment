@@ -1,6 +1,6 @@
-package com.aieducenter.security.application.dto.response;
+package com.aieducenter.openapi.application.dto.response;
 
-import com.aieducenter.security.domain.enums.ApiKeyStatus;
+import com.aieducenter.openapi.domain.enums.ApiKeyStatus;
 
 import java.time.LocalDateTime;
 

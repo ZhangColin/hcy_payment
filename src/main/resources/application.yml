@@ -1,9 +1,9 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
-    name: aieducenter-platform
+    name: aieducenter-payment
 
   # 激活的配置（默认 local，部署时通过环境变量覆盖）
   profiles:
@@ -22,35 +22,6 @@ spring:
     hibernate:
       ddl-auto: none  # 暂时禁用验证
     show-sql: false
-
-# cartisan-security 配置
-cartisan:
-  security:
-    interceptor:
-      path-patterns:
-        - "/api/**"
-        - "/admin/**"
-      exclude-path-patterns:
-        - "/error"
-        - "/actuator/**"
-        - "/api/account/verification-code/**"
-        - "/api/account/verify-code"
-        - "/api/account/register/**"
-        - "/api/account/login"
-        - "/api/account/login/sms"
-        - "/api/account/reset-password"
-        - "/api/health"
-        - "/swagger-ui/**"
-        - "/api-docs/**"
-
-# Sa-Token 配置
-sa-token:
-  token-name: Authorization
-  timeout: 604800       # 7 天（秒）
-  active-timeout: -1    # 不启用动态续期
-  is-concurrent: true
-  is-share: false
-  token-style: uuid
 
 # Actuator 配置
 management:

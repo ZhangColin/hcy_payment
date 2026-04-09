@@ -1,6 +1,6 @@
-package com.aieducenter.security.domain.repository;
+package com.aieducenter.openapi.domain.repository;
 
-import com.aieducenter.security.domain.aggregate.ApiKey;
+import com.aieducenter.openapi.domain.aggregate.ApiKey;
 import com.cartisan.data.jpa.repository.BaseRepository;
 
 import java.util.Optional;

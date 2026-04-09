@@ -40,7 +40,7 @@ public class PaymentAppService {
         PaymentOrder paymentOrder = new PaymentOrder(
             command.businessOrderNo(),
             businessSystemName,
-            command.businessType(),
+            command.businessName(),
             command.amount(),
             command.subject(),
             command.body(),

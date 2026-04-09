@@ -1,6 +1,5 @@
 package com.aieducenter.payment.application.dto.command;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

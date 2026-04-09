@@ -1,9 +1,9 @@
-package com.aieducenter.security.domain.aggregate;
+package com.aieducenter.openapi.domain.aggregate;
 
 import cn.hutool.core.util.StrUtil;
-import com.aieducenter.security.domain.entity.ApiKeyPermission;
-import com.aieducenter.security.domain.enums.ApiKeyStatus;
-import com.aieducenter.security.domain.error.SecurityMessage;
+import com.aieducenter.openapi.domain.entity.ApiKeyPermission;
+import com.aieducenter.openapi.domain.enums.ApiKeyStatus;
+import com.aieducenter.openapi.domain.error.OpenApiMessage;
 import com.cartisan.core.domain.AggregateRoot;
 import com.cartisan.core.stereotype.Aggregate;
 import com.cartisan.core.util.Assertions;
@@ -14,7 +14,7 @@ import lombok.Getter;
 import java.util.Set;
 
 @Entity
-@Table(name = "security_api_keys")
+@Table(name = "oas_api_keys")
 @Aggregate
 public class ApiKey extends AuditableSoftDeletable implements AggregateRoot<ApiKey, Long> {
     private static final String API_KEY_PATTERN = "^[A-Z0-9]{32}$";
@@ -65,7 +65,7 @@ public class ApiKey extends AuditableSoftDeletable implements AggregateRoot<ApiK
      */
     public ApiKey(String businessSystemName, String description, Set<String> permissions) {
         Assertions.require(StrUtil.isNotBlank(businessSystemName),
-            SecurityMessage.API_KEY_INVALID);
+            OpenApiMessage.API_KEY_INVALID);
 
         this.businessSystemName = businessSystemName;
         this.description = description;

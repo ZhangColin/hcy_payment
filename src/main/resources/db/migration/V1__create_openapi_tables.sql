@@ -1,8 +1,8 @@
 -- ========================================================================
--- Security Context: API Key Management
+-- OpenAPI Context: API Key Management
 -- ========================================================================
 
-CREATE TABLE security_api_keys (
+CREATE TABLE oas_api_keys (
     id BIGINT PRIMARY KEY,
     api_key VARCHAR(64) NOT NULL UNIQUE,
     api_secret VARCHAR(128) NOT NULL,
@@ -18,5 +18,5 @@ CREATE TABLE security_api_keys (
 );
 
 -- Indexes
-CREATE INDEX idx_security_api_keys_api_key ON security_api_keys(api_key) WHERE deleted = FALSE;
-CREATE INDEX idx_security_api_keys_system ON security_api_keys(business_system_name) WHERE deleted = FALSE;
+CREATE INDEX idx_oas_api_keys_api_key ON oas_api_keys(api_key) WHERE deleted = FALSE;
+CREATE INDEX idx_oas_api_keys_system ON oas_api_keys(business_system_name) WHERE deleted = FALSE;

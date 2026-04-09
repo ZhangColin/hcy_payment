@@ -1,6 +1,6 @@
 package com.aieducenter.payment.domain.aggregate;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
+
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class PaymentOrderTest {
         PaymentOrder order = new PaymentOrder(
             "ORDER001",
             "TestSystem",
-            BusinessType.EDUCATION,
+            "课程购买",
             10000L,
             "Python课程",
             "Python编程课程",
@@ -37,7 +37,7 @@ class PaymentOrderTest {
         // Then
         assertThat(order.getBusinessOrderNo()).isEqualTo("ORDER001");
         assertThat(order.getBusinessSystemName()).isEqualTo("TestSystem");
-        assertThat(order.getBusinessType()).isEqualTo(BusinessType.EDUCATION);
+        assertThat(order.getBusinessName()).isEqualTo("课程购买");
         assertThat(order.getStatus()).isEqualTo(PaymentStatus.PENDING);
         assertThat(order.getAmount()).isEqualTo(10000L);
         assertThat(order.getCurrency()).isEqualTo("CNY");
@@ -52,7 +52,7 @@ class PaymentOrderTest {
     void given_pendingOrder_when_markAsPaid_then_statusUpdated() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
@@ -73,7 +73,7 @@ class PaymentOrderTest {
     void given_paidOrder_when_markAsPaid_then_throwsException() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
@@ -90,7 +90,7 @@ class PaymentOrderTest {
     void given_pendingOrder_when_markAsFailed_then_statusUpdated() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
@@ -108,7 +108,7 @@ class PaymentOrderTest {
     void given_pendingOrder_when_cancel_then_statusUpdated() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
@@ -126,7 +126,7 @@ class PaymentOrderTest {
     void given_pendingOrder_when_markAsExpired_then_statusUpdated() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
@@ -143,7 +143,7 @@ class PaymentOrderTest {
     void given_expiredOrder_when_isExpired_then_returnsTrue() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null,
             1L // 1 秒后过期
@@ -167,7 +167,7 @@ class PaymentOrderTest {
     void given_notExpiredOrder_when_isExpired_then_returnsFalse() {
         // Given
         PaymentOrder order = new PaymentOrder(
-            "ORDER001", "TestSystem", BusinessType.EDUCATION,
+            "ORDER001", "TestSystem", "课程购买",
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null,
             3600L // 1 小时后过期

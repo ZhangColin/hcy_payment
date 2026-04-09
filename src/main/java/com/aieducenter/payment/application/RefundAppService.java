@@ -45,7 +45,7 @@ public class RefundAppService {
             command.businessOrderNo(),
             command.paymentOrderNo(),
             businessSystemName,
-            paymentOrder.getBusinessType(),
+            paymentOrder.getBusinessName(),
             command.refundAmount(),
             paymentOrder.getAmount(), // 可退款金额 = 支付金额
             command.reason(),
@@ -95,7 +95,7 @@ public class RefundAppService {
             order.getRefundOrderNo(),
             order.getPaymentOrderNo(),
             order.getBusinessSystemName(),
-            order.getBusinessType(),
+            order.getBusinessName(),
             order.getStatus(),
             order.getRefundAmount(),
             order.getRefundableAmount(),

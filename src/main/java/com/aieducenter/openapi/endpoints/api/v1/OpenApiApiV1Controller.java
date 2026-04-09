@@ -1,8 +1,8 @@
-package com.aieducenter.security.endpoints.api.v1;
+package com.aieducenter.openapi.endpoints.api.v1;
 
-import com.aieducenter.security.application.ApiKeyManagementAppService;
-import com.aieducenter.security.application.dto.command.CreateApiKeyCommand;
-import com.aieducenter.security.application.dto.response.ApiKeyResponse;
+import com.aieducenter.openapi.application.ApiKeyManagementAppService;
+import com.aieducenter.openapi.application.dto.command.CreateApiKeyCommand;
+import com.aieducenter.openapi.application.dto.response.ApiKeyResponse;
 import com.cartisan.web.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,16 +12,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Security API v1 控制器
+ * OpenAPI API v1 控制器
  *
  * <p>API Key 管理接口</p>
  */
 @RestController
-@RequestMapping("/api/v1/security/api-keys")
+@RequestMapping("/api/v1/openapi/api-keys")
 @RequiredArgsConstructor
 @Validated
-@Tag(name = "Security API v1", description = "API Key 管理接口")
-public class SecurityApiV1Controller {
+@Tag(name = "OpenAPI API v1", description = "API Key 管理接口")
+public class OpenApiApiV1Controller {
 
     private final ApiKeyManagementAppService apiKeyManagementAppService;
 

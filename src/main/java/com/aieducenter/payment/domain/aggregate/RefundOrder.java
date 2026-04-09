@@ -1,7 +1,6 @@
 package com.aieducenter.payment.domain.aggregate;
 
 import cn.hutool.core.util.StrUtil;
-import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.RefundStatus;
 import com.aieducenter.payment.domain.error.PaymentMessage;
 import com.cartisan.core.domain.AggregateRoot;
@@ -14,7 +13,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_refund_orders")
+@Table(name = "pay_refund_orders")
 @Aggregate
 public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot<RefundOrder, Long> {
     private static final String REFUND_ORDER_NO_PREFIX = "REF";
@@ -41,8 +40,8 @@ public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot
     private String businessSystemName;
 
     @Getter
-    @Column(name = "business_type", nullable = false)
-    private BusinessType businessType;
+    @Column(name = "business_name", length = 128)
+    private String businessName;
 
     @Getter
     @Column(name = "status", nullable = false)
@@ -126,7 +125,7 @@ public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot
             String businessOrderNo,
             String paymentOrderNo,
             String businessSystemName,
-            BusinessType businessType,
+            String businessName,
             Long refundAmount,
             Long refundableAmount,
             String reason,
@@ -142,7 +141,7 @@ public class RefundOrder extends AuditableSoftDeletable implements AggregateRoot
         this.businessOrderNo = businessOrderNo;
         this.paymentOrderNo = paymentOrderNo;
         this.businessSystemName = businessSystemName;
-        this.businessType = businessType;
+        this.businessName = businessName;
         this.refundAmount = refundAmount;
         this.refundableAmount = refundableAmount;
         this.reason = reason;

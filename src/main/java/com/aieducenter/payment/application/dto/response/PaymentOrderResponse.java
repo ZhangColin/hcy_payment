@@ -1,6 +1,5 @@
 package com.aieducenter.payment.application.dto.response;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
 
@@ -33,9 +32,9 @@ public record PaymentOrderResponse(
     String businessSystemName,
 
     /**
-     * 业务类型
+     * 业务名称
      */
-    BusinessType businessType,
+    String businessName,
 
     /**
      * 支付状态

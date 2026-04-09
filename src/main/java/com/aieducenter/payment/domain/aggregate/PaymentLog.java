@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * <p>记录所有银行接口调用的详细信息，用于问题排查和审计追溯</p>
  */
 @Entity
-@Table(name = "payment_logs")
+@Table(name = "pay_payment_logs")
 @Aggregate
 public class PaymentLog extends AuditableSoftDeletable implements AggregateRoot<PaymentLog, Long> {
 

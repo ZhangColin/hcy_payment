@@ -1,7 +1,6 @@
 package com.aieducenter.payment.domain.aggregate;
 
 import cn.hutool.core.util.StrUtil;
-import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.PaymentMethod;
 import com.aieducenter.payment.domain.enums.PaymentStatus;
 import com.aieducenter.payment.domain.error.PaymentMessage;
@@ -15,7 +14,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_payment_orders")
+@Table(name = "pay_payment_orders")
 @Aggregate
 public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoot<PaymentOrder, Long> {
     private static final String PAYMENT_ORDER_NO_PREFIX = "PAY";
@@ -38,8 +37,8 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
     private String businessSystemName;
 
     @Getter
-    @Column(name = "business_type", nullable = false)
-    private BusinessType businessType;
+    @Column(name = "business_name", length = 128)
+    private String businessName;
 
     @Getter
     @Column(name = "status", nullable = false)
@@ -128,7 +127,7 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
     public PaymentOrder(
             String businessOrderNo,
             String businessSystemName,
-            BusinessType businessType,
+            String businessName,
             Long amount,
             String subject,
             String body,
@@ -145,7 +144,7 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
 
         this.businessOrderNo = businessOrderNo;
         this.businessSystemName = businessSystemName;
-        this.businessType = businessType;
+        this.businessName = businessName;
         this.amount = amount;
         this.subject = subject;
         this.body = body;

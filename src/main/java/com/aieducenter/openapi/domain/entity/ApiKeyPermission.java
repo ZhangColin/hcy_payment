@@ -1,10 +1,10 @@
-package com.aieducenter.security.domain.entity;
+package com.aieducenter.openapi.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "security_api_key_permissions")
+@Table(name = "oas_api_key_permissions")
 @Getter
 public class ApiKeyPermission {
 

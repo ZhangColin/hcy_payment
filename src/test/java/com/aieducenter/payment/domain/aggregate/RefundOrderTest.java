@@ -1,6 +1,6 @@
 package com.aieducenter.payment.domain.aggregate;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
+
 import com.aieducenter.payment.domain.enums.RefundStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class RefundOrderTest {
             "ORDER001",
             "PAY001",
             "TestSystem",
-            BusinessType.EDUCATION,
+            "课程购买",
             10000L,
             10000L,
             "课程取消",
@@ -34,7 +34,7 @@ class RefundOrderTest {
         assertThat(order.getBusinessOrderNo()).isEqualTo("ORDER001");
         assertThat(order.getPaymentOrderNo()).isEqualTo("PAY001");
         assertThat(order.getBusinessSystemName()).isEqualTo("TestSystem");
-        assertThat(order.getBusinessType()).isEqualTo(BusinessType.EDUCATION);
+        assertThat(order.getBusinessName()).isEqualTo("课程购买");
         assertThat(order.getStatus()).isEqualTo(RefundStatus.PENDING);
         assertThat(order.getRefundAmount()).isEqualTo(10000L);
         assertThat(order.getRefundableAmount()).isEqualTo(10000L);
@@ -47,7 +47,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
 
         // When
@@ -70,7 +70,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
 
         // When
@@ -90,7 +90,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
         order.audit(123L, "张三", true, "同意退款");
 
@@ -107,7 +107,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
 
         // When & Then
@@ -122,7 +122,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
         order.audit(123L, "张三", true, "同意退款");
         order.startRefund();
@@ -142,7 +142,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
         order.audit(123L, "张三", true, "同意退款");
         order.startRefund();
@@ -161,7 +161,7 @@ class RefundOrderTest {
         // When & Then
         assertThatThrownBy(() -> new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 15000L, 10000L, "Reason", null
+            "课程购买", 15000L, 10000L, "Reason", null
         ))
             .isInstanceOf(com.cartisan.core.exception.DomainException.class)
             .hasMessageContaining("退款金额超过可退款金额");
@@ -173,7 +173,7 @@ class RefundOrderTest {
         // Given
         RefundOrder order = new RefundOrder(
             "ORDER001", "PAY001", "TestSystem",
-            BusinessType.EDUCATION, 10000L, 10000L, "Reason", null
+            "课程购买", 10000L, 10000L, "Reason", null
         );
         order.audit(123L, "张三", true, "同意退款");
 

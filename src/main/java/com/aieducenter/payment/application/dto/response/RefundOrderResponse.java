@@ -1,6 +1,5 @@
 package com.aieducenter.payment.application.dto.response;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
 import com.aieducenter.payment.domain.enums.RefundStatus;
 
 import java.time.LocalDateTime;
@@ -14,7 +13,7 @@ public record RefundOrderResponse(
     String refundOrderNo,
     String paymentOrderNo,
     String businessSystemName,
-    BusinessType businessType,
+    String businessName,
     RefundStatus status,
     Long refundAmount,
     Long refundableAmount,

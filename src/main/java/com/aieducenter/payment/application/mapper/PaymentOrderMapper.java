@@ -32,7 +32,7 @@ public interface PaymentOrderMapper {
             paymentOrder.getBusinessOrderNo(),
             paymentOrder.getPaymentOrderNo(),
             paymentOrder.getBusinessSystemName(),
-            paymentOrder.getBusinessType(),
+            paymentOrder.getBusinessName(),
             paymentOrder.getStatus(),
             paymentOrder.getAmount(),
             paymentOrder.getCurrency(),

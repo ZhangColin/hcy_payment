@@ -1,6 +1,5 @@
 package com.aieducenter.payment.application.dto.command;
 
-import com.aieducenter.payment.domain.enums.BusinessType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -42,10 +41,11 @@ public record CreatePaymentCommand(
     String body,
 
     /**
-     * 业务类型
+     * 业务名称
+     * <p>业务系统声明的业务分类，如"课程购买"、"会员充值"</p>
      */
-    @NotNull(message = "业务类型不能为空")
-    BusinessType businessType,
+    @Size(max = 128, message = "业务名称长度不能超过128")
+    String businessName,
 
     /**
      * 客户端 IP
