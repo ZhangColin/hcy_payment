@@ -62,24 +62,30 @@ public class SignatureVerificationInterceptor implements HandlerInterceptor {
             String sign = getRequiredHeader(request, "X-Sign");
             String clientBodyDigest = getRequiredHeader(request, "X-Body-Digest");
 
-            // 2. 身份校验
+            // 2. 时间戳校验（廉价检查，优先执行）
+            signatureService.validateTimestamp(timestamp, config.getTimestampTolerance());
+
+            // 3. Nonce 防重放（廉价检查，优先执行）
+            signatureService.validateNonce(nonce);
+
+            // 4. 身份校验
             ApiKey apiKey = apiKeyQueryAppService.findByApiKeyForVerification(appId);
 
-            // 3. 计算 server body digest
+            // 5. 计算 server body digest
             byte[] body = getCachedBody(request);
             String serverBodyDigest = signatureService.calculateBodyDigest(body);
 
-            // 4. 提取 query 参数
+            // 6. 提取 query 参数
             Map<String, String> queryParams = extractQueryParams(request);
 
-            // 5. 签名验证
+            // 7. 签名验证
             signatureService.verify(
                 apiKey, timestamp, nonce, sign,
                 clientBodyDigest, serverBodyDigest,
                 queryParams, config.getTimestampTolerance()
             );
 
-            // 6. 验证通过，放入 request attribute
+            // 8. 验证通过，放入 request attribute
             request.setAttribute("verifiedAppId", apiKey.getApiKey());
             request.setAttribute("verifiedBusinessSystemName", apiKey.getBusinessSystemName());
 

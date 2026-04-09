@@ -90,13 +90,11 @@ class SignatureServiceTest {
     @Test
     @DisplayName("给定有效请求，验证签名时应该通过")
     void given_validRequest_when_verify_then_pass() {
-        long currentTimestamp = System.currentTimeMillis() / 1000;
-        when(nonceRepository.existsAndStore("nonce-123")).thenReturn(false);
         when(signatureCalculator.calculate(anyString(), eq("testSecret"))).thenReturn("expected_sign");
 
         assertThatCode(() -> signatureService.verify(
             testApiKey,
-            String.valueOf(currentTimestamp),
+            String.valueOf(System.currentTimeMillis() / 1000),
             "nonce-123",
             "expected_sign",
             "bodyDigest123",
@@ -107,53 +105,49 @@ class SignatureServiceTest {
     }
 
     @Test
-    @DisplayName("给定过期时间戳，验证签名时应该抛出 TIMESTAMP_EXPIRED")
-    void given_expiredTimestamp_when_verify_then_throwTimestampExpired() {
+    @DisplayName("给定过期时间戳，validateTimestamp 应该抛出 TIMESTAMP_EXPIRED")
+    void given_expiredTimestamp_when_validateTimestamp_then_throwTimestampExpired() {
         long expiredTimestamp = System.currentTimeMillis() / 1000 - 600;
 
-        assertThatThrownBy(() -> signatureService.verify(
-            testApiKey,
-            String.valueOf(expiredTimestamp),
-            "nonce-123",
-            "sign",
-            "digest",
-            "digest",
-            Collections.emptyMap(),
-            300
-        ))
+        assertThatThrownBy(() -> signatureService.validateTimestamp(String.valueOf(expiredTimestamp), 300))
         .isInstanceOf(ApplicationException.class)
         .hasMessageContaining(OpenApiMessage.SIGNATURE_TIMESTAMP_EXPIRED.message());
     }
 
     @Test
-    @DisplayName("给定重复 Nonce，验证签名时应该抛出 NONCE_DUPLICATED")
-    void given_duplicatedNonce_when_verify_then_throwNonceDuplicated() {
+    @DisplayName("给定有效时间戳，validateTimestamp 应该通过")
+    void given_validTimestamp_when_validateTimestamp_then_pass() {
         long currentTimestamp = System.currentTimeMillis() / 1000;
+
+        assertThatCode(() -> signatureService.validateTimestamp(String.valueOf(currentTimestamp), 300))
+        .doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("给定重复 Nonce，validateNonce 应该抛出 NONCE_DUPLICATED")
+    void given_duplicatedNonce_when_validateNonce_then_throwNonceDuplicated() {
         when(nonceRepository.existsAndStore("nonce-dup")).thenReturn(true);
 
-        assertThatThrownBy(() -> signatureService.verify(
-            testApiKey,
-            String.valueOf(currentTimestamp),
-            "nonce-dup",
-            "sign",
-            "digest",
-            "digest",
-            Collections.emptyMap(),
-            300
-        ))
+        assertThatThrownBy(() -> signatureService.validateNonce("nonce-dup"))
         .isInstanceOf(ApplicationException.class)
         .hasMessageContaining(OpenApiMessage.SIGNATURE_NONCE_DUPLICATED.message());
     }
 
     @Test
+    @DisplayName("给定新 Nonce，validateNonce 应该通过")
+    void given_newNonce_when_validateNonce_then_pass() {
+        when(nonceRepository.existsAndStore("nonce-new")).thenReturn(false);
+
+        assertThatCode(() -> signatureService.validateNonce("nonce-new"))
+        .doesNotThrowAnyException();
+    }
+
+    @Test
     @DisplayName("给定不匹配的 bodyDigest，验证签名时应该抛出 BODY_DIGEST_MISMATCH")
     void given_mismatchedBodyDigest_when_verify_then_throwBodyDigestMismatch() {
-        long currentTimestamp = System.currentTimeMillis() / 1000;
-        when(nonceRepository.existsAndStore("nonce-123")).thenReturn(false);
-
         assertThatThrownBy(() -> signatureService.verify(
             testApiKey,
-            String.valueOf(currentTimestamp),
+            String.valueOf(System.currentTimeMillis() / 1000),
             "nonce-123",
             "sign",
             "clientDigest",
@@ -168,13 +162,11 @@ class SignatureServiceTest {
     @Test
     @DisplayName("给定不匹配的签名，验证签名时应该抛出 SIGNATURE_MISMATCH")
     void given_mismatchedSignature_when_verify_then_throwSignatureMismatch() {
-        long currentTimestamp = System.currentTimeMillis() / 1000;
-        when(nonceRepository.existsAndStore("nonce-123")).thenReturn(false);
         when(signatureCalculator.calculate(anyString(), anyString())).thenReturn("server_sign");
 
         assertThatThrownBy(() -> signatureService.verify(
             testApiKey,
-            String.valueOf(currentTimestamp),
+            String.valueOf(System.currentTimeMillis() / 1000),
             "nonce-123",
             "client_sign",
             "sameDigest",

@@ -82,6 +82,8 @@ class SignatureVerificationInterceptorTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         ApiKey apiKey = createTestApiKey("testApp", "secret", "TestSystem");
+        doNothing().when(signatureService).validateTimestamp(anyString(), anyLong());
+        doNothing().when(signatureService).validateNonce(anyString());
         when(apiKeyQueryAppService.findByApiKeyForVerification("testApp")).thenReturn(apiKey);
         when(signatureService.calculateBodyDigest(any(byte[].class))).thenReturn("serverDigest");
         doNothing().when(signatureService).verify(any(), any(), any(), any(), any(), any(), any(), anyLong());

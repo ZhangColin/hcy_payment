@@ -22,29 +22,39 @@ public class SignatureService {
     private final NonceRepository nonceRepository;
 
     /**
-     * 验证请求签名
+     * 校验时间戳（廉价检查，应在身份校验之前执行）
      */
-    public void verify(ApiKey apiKey, String timestamp, String nonce,
-                       String clientSign, String clientBodyDigest, String serverBodyDigest,
-                       Map<String, String> queryParams, long timestampTolerance) {
-        // 1. 时间戳校验
+    public void validateTimestamp(String timestamp, long timestampTolerance) {
         long requestTime = Long.parseLong(timestamp);
         long currentTime = System.currentTimeMillis() / 1000;
         if (Math.abs(currentTime - requestTime) > timestampTolerance) {
             throw new ApplicationException(OpenApiMessage.SIGNATURE_TIMESTAMP_EXPIRED);
         }
+    }
 
-        // 2. Nonce 防重放
+    /**
+     * Nonce 防重放校验（廉价检查，应在身份校验之前执行）
+     */
+    public void validateNonce(String nonce) {
         if (nonceRepository.existsAndStore(nonce)) {
             throw new ApplicationException(OpenApiMessage.SIGNATURE_NONCE_DUPLICATED);
         }
+    }
 
-        // 3. Body Digest 校验
+    /**
+     * 验证请求签名（Body Digest + 签名校验）
+     *
+     * <p>时间戳和 Nonce 校验由拦截器提前执行，此处只做 Body Digest 和签名校验</p>
+     */
+    public void verify(ApiKey apiKey, String timestamp, String nonce,
+                       String clientSign, String clientBodyDigest, String serverBodyDigest,
+                       Map<String, String> queryParams, long timestampTolerance) {
+        // 1. Body Digest 校验
         if (!serverBodyDigest.equals(clientBodyDigest)) {
             throw new ApplicationException(OpenApiMessage.SIGNATURE_BODY_DIGEST_MISMATCH);
         }
 
-        // 4. 签名校验
+        // 2. 签名校验
         String expectedSign = calculateSign(
             apiKey.getApiKey(), clientBodyDigest, nonce, timestamp, queryParams, apiKey.getApiSecret()
         );
