@@ -114,6 +114,9 @@ CREATE TABLE pay_payment_logs (
     success BOOLEAN NOT NULL,
     error_message TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by BIGINT,
+    updated_by BIGINT,
     deleted BOOLEAN NOT NULL DEFAULT FALSE
 );
 
