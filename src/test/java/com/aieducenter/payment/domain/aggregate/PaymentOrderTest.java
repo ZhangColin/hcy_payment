@@ -58,7 +58,7 @@ class PaymentOrderTest {
         );
 
         // When
-        order.markAsPaid("ICBC123", "WX123", PaymentMethod.WECHAT);
+        order.markAsPaid("ICBC123", "WX123", PaymentMethod.WECHAT, 10000L);
 
         // Then
         assertThat(order.getStatus()).isEqualTo(PaymentStatus.PAID);
@@ -77,10 +77,10 @@ class PaymentOrderTest {
             10000L, "Python", "Course", "127.0.0.1",
             "https://example.com/notify", "https://example.com/return", null, null
         );
-        order.markAsPaid("ICBC123", "WX123", PaymentMethod.WECHAT);
+        order.markAsPaid("ICBC123", "WX123", PaymentMethod.WECHAT, 10000L);
 
         // When & Then
-        assertThatThrownBy(() -> order.markAsPaid("ICBC456", "WX456", PaymentMethod.ALIPAY))
+        assertThatThrownBy(() -> order.markAsPaid("ICBC456", "WX456", PaymentMethod.ALIPAY, 5000L))
             .isInstanceOf(com.cartisan.core.exception.DomainException.class)
             .hasMessageContaining("支付订单不是待支付状态");
     }

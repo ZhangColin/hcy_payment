@@ -152,7 +152,8 @@ public class PaymentAppService {
                 paymentOrder.markAsPaid(
                     queryResponse.bankOrderNo(),
                     queryResponse.thirdPartyOrderNo(),
-                    queryResponse.paymentMethod()
+                    queryResponse.paymentMethod(),
+                    queryResponse.paidAmount()
                 );
                 paymentOrderRepository.save(paymentOrder);
             } else if (queryResponse.paymentStatus().equals(PaymentStatus.FAILED) &&

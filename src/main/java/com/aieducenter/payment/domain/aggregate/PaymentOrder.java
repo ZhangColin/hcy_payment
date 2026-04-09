@@ -110,6 +110,10 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
     @Column(name = "third_party_order_no", length = 128)
     private String thirdPartyOrderNo;
 
+    @Getter
+    @Column(name = "actual_amount")
+    private Long actualAmount;
+
     @PrePersist
     void prePersist() {
         if (id == null) {
@@ -165,7 +169,7 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
     /**
      * 支付成功
      */
-    public void markAsPaid(String bankOrderNo, String thirdPartyOrderNo, PaymentMethod paymentMethod) {
+    public void markAsPaid(String bankOrderNo, String thirdPartyOrderNo, PaymentMethod paymentMethod, Long actualAmount) {
         Assertions.require(this.status == PaymentStatus.PENDING,
             PaymentMessage.PAYMENT_ORDER_NOT_PENDING);
 
@@ -174,6 +178,7 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
         this.bankOrderNo = bankOrderNo;
         this.thirdPartyOrderNo = thirdPartyOrderNo;
         this.paymentMethod = paymentMethod;
+        this.actualAmount = actualAmount;
     }
 
     /**
