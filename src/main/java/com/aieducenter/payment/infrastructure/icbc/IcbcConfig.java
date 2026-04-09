@@ -67,4 +67,10 @@ public class IcbcConfig {
      * 退款查询接口地址
      */
     private String refundQueryUrl;
+
+    /**
+     * 支付回调基础地址
+     * <p>用于拼接工行异步通知地址: {notifyBaseUrl}/api/v1/payment/callbacks/icbc</p>
+     */
+    private String notifyBaseUrl;
 }

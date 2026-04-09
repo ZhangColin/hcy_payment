@@ -55,10 +55,10 @@ public class IcbcPaymentGatewayAdapter implements PaymentGatewayPort {
         bizContent.setCur_type(paymentOrder.getCurrency());
         bizContent.setAmount(paymentOrder.getAmount().toString());
         bizContent.setIcbc_appid(icbcConfig.getAppId());
-        bizContent.setMer_url(paymentOrder.getNotifyUrl());
+        bizContent.setMer_url(icbcConfig.getNotifyBaseUrl() + "/api/v1/payment/callbacks/icbc");
         bizContent.setExpire_time(paymentOrder.getExpiredSeconds().toString());
         bizContent.setNotify_type("HS");
-        bizContent.setResult_type("1");
+        bizContent.setResult_type("0");
         bizContent.setOrder_date(paymentOrder.getCreatedAt().format(
             java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         bizContent.setGoods_name(paymentOrder.getSubject());

@@ -20,3 +20,17 @@ openapi:
     timestamp-tolerance: 300
     nonce-ttl: 300
     enabled: true
+
+# 工行支付网关配置
+gateway:
+  icbc:
+    env: local
+    app-id: ${ICBC_APP_ID:dummy-app-id}
+    mer-id: ${ICBC_MER_ID:dummy-mer-id}
+    mer-prtcl-no: ${ICBC_MER_PRTL_NO:dummy-prtcl-no}
+    private-key: ${ICBC_PRIVATE_KEY:dummy-private-key}
+    public-key: ${ICBC_PUBLIC_KEY:dummy-public-key}
+    notify-base-url: ${ICBC_NOTIFY_BASE_URL:http://localhost:8081}
+    payment-url: ${ICBC_PAYMENT_URL:https://gw.open.icbc.com.cn/api/cardbusiness/qrcode/consumption/V1}
+    payment-query-url: ${ICBC_PAYMENT_QUERY_URL:https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/orderqry/V1}
+    refund-url: ${ICBC_REFUND_URL:https://gw.open.icbc.com.cn/api/cardbusiness/aggregatepay/b2c/online/merrefund/V1}
