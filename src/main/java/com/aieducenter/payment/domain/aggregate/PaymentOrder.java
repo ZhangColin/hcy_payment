@@ -121,6 +121,8 @@ public class PaymentOrder extends AuditableSoftDeletable implements AggregateRoo
         }
     }
 
+    protected PaymentOrder() {}
+
     /**
      * 创建支付订单
      */

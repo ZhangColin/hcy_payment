@@ -11,7 +11,7 @@ spring:
 
   # Flyway 配置
   flyway:
-    enabled: false  # 禁用自动配置，使用 FlywayConfig 手动配置多实例
+    enabled: true  # 禁用自动配置，使用 FlywayConfig 手动配置多实例
 
   # 数据源驱动
   datasource:

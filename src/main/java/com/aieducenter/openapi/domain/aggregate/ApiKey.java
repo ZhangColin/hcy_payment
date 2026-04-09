@@ -60,6 +60,8 @@ public class ApiKey extends AuditableSoftDeletable implements AggregateRoot<ApiK
         }
     }
 
+    protected ApiKey() {}
+
     /**
      * 创建 API Key
      */
