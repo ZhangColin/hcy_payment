@@ -166,6 +166,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/icbc/icbc-api-sdk-cop-io.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.icbc</groupId>
+            <artifactId>hsm-software-share</artifactId>
+            <version>1.0.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/icbc/hsm-software-share-1.0.5.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
